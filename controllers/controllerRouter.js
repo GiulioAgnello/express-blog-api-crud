@@ -3,9 +3,14 @@ let { posts } = require("../db");
 
 // controller delle routers
 const index = (req, res) => {
+  const filterTag = req.query.tags;
+  let filteredPost = [...posts];
+  if (filterTag) {
+    filteredPost = filteredPost.filter((post) => post.tags.includes(filterTag));
+  }
   res.json({
     description: `lista dei post`,
-    data: posts,
+    data: filteredPost,
   });
 };
 const show = (req, res) => {
