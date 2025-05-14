@@ -11,7 +11,13 @@ const index = (req, res) => {
 const show = (req, res) => {
   const id = parseInt(req.params.id);
   const post = posts.find((currentPost) => currentPost.id === id);
-
+  if (!post) {
+    res.status(404);
+    return res.json({
+      error: "not found",
+      message: "post not found",
+    });
+  }
   res.json({
     description: `post selezionato`,
     data: post,
@@ -30,9 +36,17 @@ const modify = (req, res) => {
 };
 const destroy = (req, res) => {
   const id = parseInt(req.params.id);
-  posts = posts.filter((currentPost) => currentPost.id !== id);
+  const post = posts.find((post) => post.id === id);
+  if (!post) {
+    res.status(404);
+    return res.json({
+      error: "not found",
+      message: "post not found",
+    });
+  }
+  posts.splice(posts.indexOf(post), 1);
   res.json({
-    description: `eliminato post n ${id}`,
+    description: `lista dei post`,
     data: posts,
   });
 };
