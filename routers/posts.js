@@ -1,51 +1,24 @@
 const express = require("express");
 const router = express.Router();
 let { posts } = require("../db");
+const controllerRouter = require("../controllers/controllerRouter");
 
 // index
-router.get(`/`, (req, res) => {
-  res.json({
-    description: `lista dei post`,
-    data: posts,
-  });
-});
+router.get(`/`, controllerRouter.index);
 
 // show
-router.get("/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const post = posts.find((currentPost) => currentPost.id === id);
-
-  res.json({
-    description: `post selezionato`,
-    data: post,
-  });
-});
+router.get("/:id", controllerRouter.show);
 // store
-router.post(`/`, (req, res) => {
-  res.json(`crea nuovo post`);
-});
+router.post(`/`, controllerRouter.store);
 
 // update
-router.put("/:id", (req, res) => {
-  const id = req.params.id;
-  res.json(`modifica completa post n ${post}`);
-});
+router.put("/:id", controllerRouter.update);
 
 // modify
-router.patch("/:id", (req, res) => {
-  const id = req.params.id;
-  res.json(`modifica parziale post n ${post}`);
-});
+router.patch("/:id", controllerRouter.modify);
 
 // destroy
-router.delete("/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  posts = posts.filter((currentPost) => currentPost.id !== id);
-  res.json({
-    description: `eliminato post n ${id}`,
-    data: posts,
-  });
-});
+router.delete("/:id", controllerRouter.destroy);
 
 // export
 module.exports = router;
