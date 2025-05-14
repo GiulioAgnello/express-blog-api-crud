@@ -1,8 +1,8 @@
 // import
 const { posts } = require("./db");
 const postsRouter = require("./routers/posts");
-// install express e port
 const express = require("express");
+// install express e port
 const app = express();
 const port = 3000;
 const url = `http://localhost:${port}`;

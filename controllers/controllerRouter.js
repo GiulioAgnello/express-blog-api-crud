@@ -1,12 +1,13 @@
-// controller delle routers
+// import
+let { posts } = require("../db");
 
+// controller delle routers
 const index = (req, res) => {
   res.json({
     description: `lista dei post`,
     data: posts,
   });
 };
-
 const show = (req, res) => {
   const id = parseInt(req.params.id);
   const post = posts.find((currentPost) => currentPost.id === id);
