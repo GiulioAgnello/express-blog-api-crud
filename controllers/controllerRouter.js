@@ -29,11 +29,44 @@ const show = (req, res) => {
   });
 };
 const store = (req, res) => {
-  // nuovo id
-  const newId = posts[posts.length - 1].id + 1;
-
   // recuperiamo info dal body
   const { title, content, image, tags } = req.body;
+  // controllo dati dal body
+  let isRequestMalformed = false;
+  const malformedElement = [];
+
+  if (!title || typeof title !== "string") {
+    console.log("title is malformed");
+    malformedElement.push(title);
+    isRequestMalformed = true;
+  }
+  if (!content || typeof content !== "string") {
+    console.log("content is malformed");
+    malformedElement.push(content);
+    isRequestMalformed = true;
+  }
+  if (!image || typeof image !== "string") {
+    console.log("image is malformed");
+    malformedElement.push(image);
+    isRequestMalformed = true;
+  }
+  if (!Array.isArray(tags)) {
+    console.log("tags is malformed");
+    malformedElement.push(tags);
+    isRequestMalformed = true;
+  }
+
+  if (isRequestMalformed) {
+    res.status(400);
+
+    res.json({
+      error: "400 bad request",
+      message: "request is malformed",
+    });
+    return;
+  }
+  // nuovo id
+  const newId = posts[posts.length - 1].id + 1;
   const newPost = {
     id: newId,
     title: title,
@@ -60,6 +93,40 @@ const update = (req, res) => {
   }
   // creiamo il nuovo post
   const { title, content, image, tags } = req.body;
+  // controllo dati dal body
+  let isRequestMalformed = false;
+  const malformedElement = [];
+
+  if (!title || typeof title !== "string") {
+    console.log("title is malformed");
+    malformedElement.push(title);
+    isRequestMalformed = true;
+  }
+  if (!content || typeof content !== "string") {
+    console.log("content is malformed");
+    malformedElement.push(content);
+    isRequestMalformed = true;
+  }
+  if (!image || typeof image !== "string") {
+    console.log("image is malformed");
+    malformedElement.push(image);
+    isRequestMalformed = true;
+  }
+  if (!Array.isArray(tags)) {
+    console.log("tags is malformed");
+    malformedElement.push(tags);
+    isRequestMalformed = true;
+  }
+
+  if (isRequestMalformed) {
+    res.status(400);
+
+    res.json({
+      error: "400 bad request",
+      message: "request is malformed",
+    });
+    return;
+  }
   const newPost = {
     id: post.id,
     title: title,
@@ -67,6 +134,7 @@ const update = (req, res) => {
     image: image,
     tags: tags,
   };
+  // sostituisco con lo splice il post con id d'interesse
   posts.splice(posts.indexOf(post), 1, newPost);
   res.json({
     description: `lista dei post`,
@@ -74,7 +142,16 @@ const update = (req, res) => {
   });
 };
 const modify = (req, res) => {
-  const id = req.params.id;
+  // recupero post dove applicare la patch
+  const id = parseInt(req.params.id);
+  const post = posts.find((currentPost) => currentPost.id === id);
+  if (!post) {
+    res.status(404);
+    return res.json({
+      error: "not found",
+      message: "post not found",
+    });
+  }
   res.json(`modifica parziale post n ${post}`);
 };
 const destroy = (req, res) => {
