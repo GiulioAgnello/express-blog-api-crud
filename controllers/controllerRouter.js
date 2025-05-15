@@ -48,8 +48,30 @@ const store = (req, res) => {
   res.json(newPost);
 };
 const update = (req, res) => {
-  const id = req.params.id;
-  res.json(`modifica completa post n ${post}`);
+  // recupero il post da modificare
+  const id = parseInt(req.params.id);
+  const post = posts.find((currentPost) => currentPost.id === id);
+  if (!post) {
+    res.status(404);
+    return res.json({
+      error: "not found",
+      message: "post not found",
+    });
+  }
+  // creiamo il nuovo post
+  const { title, content, image, tags } = req.body;
+  const newPost = {
+    id: post.id,
+    title: title,
+    content: content,
+    image: image,
+    tags: tags,
+  };
+  posts.splice(posts.indexOf(post), 1, newPost);
+  res.json({
+    description: `lista dei post`,
+    data: posts,
+  });
 };
 const modify = (req, res) => {
   const id = req.params.id;
