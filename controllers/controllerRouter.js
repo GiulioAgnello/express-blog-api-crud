@@ -29,7 +29,23 @@ const show = (req, res) => {
   });
 };
 const store = (req, res) => {
-  res.json(`crea nuovo post`);
+  // nuovo id
+  const newId = posts[posts.length - 1].id + 1;
+
+  // recuperiamo info dal body
+  const { title, content, image, tags } = req.body;
+  const newPost = {
+    id: newId,
+    title: title,
+    content: content,
+    image: image,
+    tags: tags,
+  };
+  // pusho il nuovo post nell'array
+  posts.push(newPost);
+  // restituisco le informazioni aggionrate
+  res.status(201);
+  res.json(newPost);
 };
 const update = (req, res) => {
   const id = req.params.id;

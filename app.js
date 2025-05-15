@@ -7,11 +7,12 @@ const app = express();
 const port = 3000;
 const url = `http://localhost:${port}`;
 
-// accesso all routers
-app.use(postsRouter);
-
 // cartella public disponibile
 app.use(express.static("public"));
+app.use(express.json());
+
+// accesso all routers
+app.use(postsRouter);
 
 // ascolto
 app.listen(port, () => {
