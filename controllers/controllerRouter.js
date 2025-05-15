@@ -99,20 +99,20 @@ const update = (req, res) => {
 
   if (!title || typeof title !== "string") {
     console.log("title is malformed");
-    malformedElement.push(title);
+    malformedElement.push("title");
     isRequestMalformed = true;
   }
   if (!content || typeof content !== "string") {
     console.log("content is malformed");
-    malformedElement.push(content);
+    malformedElement.push("content");
     isRequestMalformed = true;
   }
   if (!image || typeof image !== "string") {
     console.log("image is malformed");
-    malformedElement.push(image);
+    malformedElement.push("image");
     isRequestMalformed = true;
   }
-  if (!Array.isArray(tags)) {
+  if (!Array.isArray("tags")) {
     console.log("tags is malformed");
     malformedElement.push(tags);
     isRequestMalformed = true;
@@ -152,7 +152,64 @@ const modify = (req, res) => {
       message: "post not found",
     });
   }
-  res.json(`modifica parziale post n ${post}`);
+  // creiamo il nuovo post
+  const title = req.body.title !== undefined ? req.body.title : post.title;
+  const content =
+    req.body.content !== undefined ? req.body.content : post.content;
+  const image = req.body.image !== undefined ? req.body.image : post.image;
+  const tags = req.body.tags !== undefined ? req.body.tags : post.tags;
+  // controllo dati dal body
+  let isRequestMalformed = false;
+  const malformedElement = [];
+
+  if (!title || typeof title !== "string") {
+    console.log("title is malformed");
+    malformedElement.push("title");
+    isRequestMalformed = true;
+  }
+  if (!content || typeof content !== "string") {
+    console.log("content is malformed");
+    malformedElement.push("content");
+    isRequestMalformed = true;
+  }
+  if (!image || typeof image !== "string") {
+    console.log("image is malformed");
+    malformedElement.push("image");
+    isRequestMalformed = true;
+  }
+  if (!Array.isArray(tags)) {
+    console.log("tags is malformed");
+    malformedElement.push("tags");
+    isRequestMalformed = true;
+  }
+
+  if (isRequestMalformed) {
+    res.status(400);
+
+    res.json({
+      error: "400 bad request",
+      message: "request is malformed",
+      malformedElement,
+    });
+    return;
+  }
+  // if (title) {
+  //   post.title = title;
+  // }
+  // if (content) {
+  //   post.content = content;
+  // }
+  // if (image) {
+  //   post.image = image;
+  // }
+  // if (tags) {
+  //   post.tags = tags;
+  // }
+  post.title = title;
+  post.content = content;
+  post.image = image;
+  post.tags = tags;
+  res.json(post);
 };
 const destroy = (req, res) => {
   const id = parseInt(req.params.id);
